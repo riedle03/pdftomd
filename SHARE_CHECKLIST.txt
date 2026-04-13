@@ -1,0 +1,13 @@
+Share this whole folder, not just one file.
+
+Recipient needs:
+- Python installed
+- Node.js installed
+- Microsoft Office installed only if they want .doc/.xls/.ppt support
+
+Recipient steps:
+1. Open PowerShell in this folder
+2. Run:
+   powershell -ExecutionPolicy Bypass -File .\setup_windows.ps1
+3. Run:
+   py .\convert_to_md.py "." --skip-unsupported
