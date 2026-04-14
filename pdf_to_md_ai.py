@@ -184,12 +184,16 @@ def save_page_images(page: fitz.Page, image_dir: Path, doc_slug: str) -> list[st
                 continue
             if pix.colorspace is None:
                 continue
-            if pix.alpha or pix.colorspace.n > 3:
+            if pix.colorspace.name not in ("DeviceGray", "DeviceRGB") or pix.alpha or pix.colorspace.n > 3:
                 pix = fitz.Pixmap(fitz.csRGB, pix)
 
             image_name = f"{doc_slug}_page{page.number + 1:04d}_img{image_index:02d}.png"
             image_path = image_dir / image_name
-            image_path.write_bytes(pix.tobytes("png"))
+            try:
+                image_path.write_bytes(pix.tobytes("png"))
+            except Exception:
+                pix = fitz.Pixmap(fitz.csRGB, pix)
+                image_path.write_bytes(pix.tobytes("png"))
             image_refs.append(image_name)
         finally:
             pix = None
